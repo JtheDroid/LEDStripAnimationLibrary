@@ -33,6 +33,12 @@ protected:
     //Set led at position p to color
     virtual void setLed(unsigned int p, Color color) = 0;
 
+    //Set leds from p1 to p2 to color
+    void setLeds(unsigned int p1, unsigned int p2, Color color);
+
+    //Set leds from p1 to p2 to transition from color1 to color2
+    void setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2);
+
     //Set all leds to color using setLed
     void setAllLeds(Color color);
 
@@ -63,4 +69,28 @@ void Animation::runTimed(unsigned long interval, unsigned long &lastRun) {
 
 void Animation::setAllLeds(Color color) {
     for (unsigned int p = 0; p < ledNum; ++p) setLed(p, color);
+}
+
+void Animation::setLeds(unsigned int p1, unsigned int p2, Color color) {
+    if (p1 >= ledNum) p1 = ledNum - 1;
+    if (p2 >= ledNum) p2 = ledNum - 1;
+    if (p2 < p1) p2 = p1;
+    for (unsigned int p = p1; p <= p2; ++p) setLed(p, color);
+}
+
+void Animation::setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2) {
+    if (p2 < p1) p2 = p1;
+    int origLength{(int) (p2 - p1)};
+    if (p1 >= ledNum) p1 = ledNum - 1;
+    if (p2 >= ledNum) p2 = ledNum - 1;
+    int length{(int) (p2 - p1)};
+    for (int i = 0; i <= length; ++i) {
+        double portion{i * 1.0 / origLength};
+        Color c{(unsigned int) (color1.r + ((int) color2.r - (int) color1.r) * portion),
+                (unsigned int) (color1.g + ((int) color2.g - (int) color1.g) * portion),
+                (unsigned int) (color1.b + ((int) color2.b - (int) color1.b) * portion),
+                (unsigned int) (color1.w + ((int) color2.w - (int) color1.w) * portion)};
+        setLed(p1 + i, c);
+    }
+
 }
