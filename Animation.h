@@ -30,7 +30,9 @@ public:
         return counter;
     }
 
-    virtual void run(bool showOnRun = true);
+    virtual void run();
+
+    void run(bool showOnRun);
 
     void runTimed(unsigned long interval, unsigned long &lastRun);
 
@@ -56,6 +58,10 @@ protected:
     //Set pixel colors using setLed
     virtual void animationStep() = 0;
 };
+
+void Animation::run() {
+    run(true);
+}
 
 void Animation::run(bool showOnRun) {
     animationStep();
