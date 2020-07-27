@@ -6,7 +6,8 @@
 
 class AnimationPreviewSDL {
 private:
-    bool end{false};
+    static unsigned int counter;
+    bool end{false}, quitCalled{false};
     SDL_Window *window{nullptr};
     SDL_Renderer *renderer{nullptr};
     int xSize{0}, ySize{0};
@@ -44,13 +45,17 @@ public:
     }
 
     void begin() {
-        if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-            printError("init");
-        }
-        int w = 500, h = 500;
-        xSize = w;
-        ySize = h;
-        window = SDL_CreateWindow("AnimationTest", 100, 100, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+        if (!counter++)
+            if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+                printError("init");
+            }
+        SDL_Rect screen;
+        SDL_GetDisplayUsableBounds(0, &screen);
+        xSize = screen.w;
+        ySize = xSize / numPixels;
+        if (ySize > screen.h) ySize = screen.h;
+        window = SDL_CreateWindow("AnimationPreview", screen.x, screen.y + 100 * (counter-1), xSize, ySize,
+                                  SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
         if (!window) {
             printError("window");
@@ -66,6 +71,7 @@ public:
     }
 
     bool loop() {
+        if (end) return !end;
         SDL_Event e;
         while (SDL_PollEvent(&e))
             switch (e.type) {
@@ -75,9 +81,19 @@ public:
                     end = true;
                     break;
                 case SDL_WINDOWEVENT:
-                    if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
-                        xSize = e.window.data1;
-                        ySize = e.window.data2;
+                    if (SDL_GetWindowID(window) == e.window.windowID) {
+                        switch (e.window.event) {
+                            case SDL_WINDOWEVENT_RESIZED:
+                                xSize = e.window.data1;
+                                ySize = e.window.data2;
+                                break;
+                            case SDL_WINDOWEVENT_CLOSE:
+                                end = true;
+                                break;
+                        }
+                    } else {
+                        SDL_PushEvent(&e);
+                        return !end;
                     }
                     break;
             }
@@ -95,12 +111,17 @@ public:
     }
 
     void quit() {
+        if (quitCalled) return;
+        end = quitCalled = true;
         std::cout << "quit" << std::endl;
         cleanup(renderer, window);
-        SDL_Quit();
+        if (!--counter)
+            SDL_Quit();
     }
 
     virtual ~AnimationPreviewSDL() {
         quit();
     }
 };
+
+unsigned int AnimationPreviewSDL::counter{0};
