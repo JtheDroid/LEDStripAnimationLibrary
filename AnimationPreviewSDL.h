@@ -10,14 +10,37 @@ private:
     SDL_Window *window{nullptr};
     SDL_Renderer *renderer{nullptr};
     int xSize{0}, ySize{0};
+    unsigned int numPixels;
+
+    void drawRect(int x, int y, int xS, int yS, Uint8 r, Uint8 g, Uint8 b) {
+        SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+        SDL_Rect rect{x, y, xS, yS};
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+    void drawLed(unsigned int index, Color color) {
+        int size = (int) (xSize / numPixels);
+        drawRect(size * (int) index, 0, size, ySize, color.r, color.g, color.b);
+    }
+
+    FunctionAnimationDisplay sdlDisplay;
+private:
 
     static void printError(const char *where) {
         std::cout << where << ": " << SDL_GetError() << std::endl;
     }
 
+
 public:
-    AnimationPreviewSDL() {
+    AnimationPreviewSDL(unsigned int numPixels) :
+            numPixels(numPixels),
+            sdlDisplay(numPixels, [this](unsigned int pixel, Color c) { drawLed(pixel, c); },
+                       [this]() { draw_show(); }) {
         begin();
+    }
+
+    FunctionAnimationDisplay *getSdlDisplayPtr() {
+        return &sdlDisplay;
     }
 
     void begin() {
@@ -58,7 +81,6 @@ public:
                     }
                     break;
             }
-        //draw();
         return !end;
     }
 
@@ -72,12 +94,6 @@ public:
         SDL_RenderPresent(renderer);
     }
 
-    void draw_rect(int x, int y, int xS, int yS, Uint8 r, Uint8 g, Uint8 b) {
-        SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-        SDL_Rect rect{x, y, xS, yS};
-        SDL_RenderFillRect(renderer, &rect);
-    }
-
     void quit() {
         std::cout << "quit" << std::endl;
         cleanup(renderer, window);
@@ -86,13 +102,5 @@ public:
 
     virtual ~AnimationPreviewSDL() {
         quit();
-    }
-
-    int getXSize() const {
-        return xSize;
-    }
-
-    int getYSize() const {
-        return ySize;
     }
 };

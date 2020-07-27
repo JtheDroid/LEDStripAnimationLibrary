@@ -13,23 +13,10 @@ protected:
     }
 };
 
-void drawLed(AnimationPreviewSDL &sdl, unsigned int index, unsigned int length, Color color) {
-    int size = (int) (sdl.getXSize() / length);
-    sdl.draw_rect(size * (int) index, 0, size, sdl.getYSize(), color.r, color.g, color.b);
-}
 
 int main() {
-    AnimationPreviewSDL sdl{};
-    FunctionAnimationDisplay sdlDisplay{10, [&sdl, &sdlDisplay](unsigned int pixel, Color c) {
-        drawLed(sdl, pixel, sdlDisplay.getLedNum(), c);
-    }, [&sdl]() {
-        sdl.draw_show();
-    }};
-    TestAnimation testAnimation{&sdlDisplay, 50};
-    while (sdl.loop()) {
-        //sdl.draw_clear();
-        testAnimation.loop();
-        sdl.draw_show();
-    }
+    AnimationPreviewSDL sdl{10};
+    TestAnimation testAnimation{sdl.getSdlDisplayPtr(), 30};
+    while (sdl.loop()) testAnimation.loop();
     return 0;
 }
