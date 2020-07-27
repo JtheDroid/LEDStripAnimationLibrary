@@ -20,7 +20,7 @@ protected:
 int main() {
     struct preview {
         AnimationPreviewSDL sdl;
-        TimedAnimation *animation;
+        Animation *animation;
     };
     AnimationPreviewSDL sdl{10}, sdl2{100}, sdl3{200};
     TestAnimation anim1{sdl.getSdlDisplayPtr(), 30},
@@ -32,10 +32,9 @@ int main() {
     bool end{false};
     while (!end) {
         end = true;
-        for (int i = 0; i < sizeof(previews) / sizeof(preview); ++i) {
-            preview &p{previews[i]};
+        for (preview &p : previews) {
             if (p.sdl.loop()) {
-                p.animation->loop();
+                p.animation->run();
                 end = false;
             } else p.sdl.quit();
         }
