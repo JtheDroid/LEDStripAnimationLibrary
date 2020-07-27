@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Color.h"
 #include "AnimationDisplay.h"
 #include <functional>
 #include <utility>

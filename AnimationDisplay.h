@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Animation.h"
+#include "Color.h"
 
 class AnimationDisplay {
 private:

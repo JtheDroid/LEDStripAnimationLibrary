@@ -11,11 +11,8 @@ unsigned long millis() {
 
 #endif
 
+#include "Color.h"
 #include "AnimationDisplay.h"
-
-struct Color {
-    unsigned int r{0}, g{0}, b{0}, w{0};
-};
 
 class Animation {
 private:
@@ -98,11 +95,7 @@ void Animation::setLedsTransition(unsigned int p1, unsigned int p2, Color color1
     int length{(int) (p2 - p1)};
     for (int i = 0; i <= length; ++i) {
         double portion{i * 1.0 / origLength};
-        Color c{(unsigned int) (color1.r + ((int) color2.r - (int) color1.r) * portion),
-                (unsigned int) (color1.g + ((int) color2.g - (int) color1.g) * portion),
-                (unsigned int) (color1.b + ((int) color2.b - (int) color1.b) * portion),
-                (unsigned int) (color1.w + ((int) color2.w - (int) color1.w) * portion)};
-        setLed(p1 + i, c);
+        setLed(p1 + i, Color::mixColors(portion, color1, color2));
     }
 
 }
