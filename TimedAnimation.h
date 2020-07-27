@@ -6,7 +6,7 @@ class TimedAnimation : public virtual Animation {
 private:
     unsigned long interval, lastRun{millis()};
 public:
-    TimedAnimation(unsigned int ledNum, unsigned long interval) : Animation(ledNum), interval(interval) {}
+    TimedAnimation(AnimationDisplay *display, unsigned long interval) : Animation(display), interval(interval) {}
 
     void loop() {
         runTimed(interval, lastRun);

@@ -1,15 +1,18 @@
 #pragma once
+
+#include "AnimationDisplay.h"
+
 struct Color {
     unsigned int r{0}, g{0}, b{0}, w{0};
 };
 
 class Animation {
 private:
+    AnimationDisplay *display;
     unsigned int ledNum;
     unsigned long counter = 0;
-    bool showOnRun = true;
 public:
-    explicit Animation(unsigned int ledNum) : ledNum(ledNum) {}
+    explicit Animation(AnimationDisplay *display) : display(display), ledNum(display->getLedNum()) {}
 
     unsigned int getLedNum() const {
         return ledNum;
@@ -19,19 +22,19 @@ public:
         return counter;
     }
 
-    void setShowOnRun(bool showOnRun_) {
-        showOnRun = showOnRun_;
-    }
-
-    virtual void run();
+    virtual void run(bool showOnRun = true);
 
     void runTimed(unsigned long interval, unsigned long &lastRun);
 
-    virtual void show() = 0;
+    void show() {
+        display->show();
+    };
 
 protected:
     //Set led at position p to color
-    virtual void setLed(unsigned int p, Color color) = 0;
+    void setLed(unsigned int p, Color color) {
+        display->setLed(p, color);
+    }
 
     //Set leds from p1 to p2 to color
     void setLeds(unsigned int p1, unsigned int p2, Color color);
@@ -46,25 +49,23 @@ protected:
     virtual void animationStep() = 0;
 };
 
-void Animation::run() {
+void Animation::run(bool showOnRun) {
     animationStep();
-    if (showOnRun) show();
+    if (showOnRun && display->isShowOnRun()) show();
     ++counter;
 }
 
 void Animation::runTimed(unsigned long interval, unsigned long &lastRun) {
     unsigned long now = millis();
-    bool showTemp = showOnRun, shown = false;
-    showOnRun = false;
+    bool shown = false;
     while (now > lastRun && now - lastRun >= interval) {
-        Animation::run();
+        Animation::run(false);
         shown = true;
         if (counter == 1) lastRun = now;
         else lastRun += interval;
         if (interval == 0) break;
     }
-    showOnRun = showTemp;
-    if (showOnRun && shown) show();
+    if (shown && display->isShowOnRun()) show();
 }
 
 void Animation::setAllLeds(Color color) {
