@@ -8,7 +8,7 @@ private:
 public:
     TimedAnimation(AnimationDisplay *display, unsigned long interval) : Animation(display), interval(interval) {}
 
-    void loop() {
+    void run() override {
         runTimed(interval, lastRun);
     }
 };
