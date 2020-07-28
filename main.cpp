@@ -10,7 +10,7 @@ public:
 protected:
     void animationStep() override {
         for (unsigned int i = 0; i < getLedNum(); ++i) {
-            unsigned int c = getCounter() + 10 * i;
+            unsigned int c = (unsigned int) getCounter() + 10 * i;
             setLed(i, {c % 255, c / 2 % 255, c / 4 % 255});
         }
     }

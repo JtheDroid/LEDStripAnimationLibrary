@@ -21,7 +21,7 @@ private:
 
     void drawLed(unsigned int index, Color color) {
         int size = (int) (xSize / numPixels);
-        drawRect(size * (int) index, 0, size, ySize, color.r, color.g, color.b);
+        drawRect(size * (int) index, 0, size, ySize, (Uint8) color.r, (Uint8) color.g, (Uint8) color.b);
     }
 
     FunctionAnimationDisplay sdlDisplay;
@@ -33,7 +33,7 @@ private:
 
 
 public:
-    AnimationPreviewSDL(unsigned int numPixels) :
+    explicit AnimationPreviewSDL(unsigned int numPixels) :
             numPixels(numPixels),
             sdlDisplay(numPixels, [this](unsigned int pixel, Color c) { drawLed(pixel, c); },
                        [this]() { draw_show(); }) {
@@ -52,10 +52,10 @@ public:
         SDL_Rect screen;
         SDL_GetDisplayUsableBounds(0, &screen);
         xSize = screen.w;
-        ySize = xSize / numPixels;
+        ySize = (int) (xSize / numPixels);
         if (ySize > screen.h) ySize = screen.h;
-        window = SDL_CreateWindow("AnimationPreview", screen.x, screen.y + 100 * (counter-1), xSize, ySize,
-                                  SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+        window = SDL_CreateWindow("AnimationPreview", screen.x, (int) (screen.y + 100 * (counter - 1)),
+                                  xSize, ySize, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
         if (!window) {
             printError("window");
@@ -90,11 +90,15 @@ public:
                             case SDL_WINDOWEVENT_CLOSE:
                                 end = true;
                                 break;
+                            default:
+                                break;
                         }
                     } else {
                         SDL_PushEvent(&e);
                         return !end;
                     }
+                    break;
+                default:
                     break;
             }
         return !end;
