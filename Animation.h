@@ -2,10 +2,10 @@
 
 #ifndef Arduino_h
 
-#include<chrono>
+#include <chrono>
 
 unsigned long millis() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(
+    return (unsigned long) std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
@@ -22,11 +22,11 @@ private:
 public:
     explicit Animation(AnimationDisplay *display) : display(display), ledNum(display->getLedNum()) {}
 
-    unsigned int getLedNum() const {
+    virtual unsigned int getLedNum() const {
         return ledNum;
     }
 
-    unsigned int getCounter() const {
+    unsigned long getCounter() const {
         return counter;
     }
 
@@ -42,7 +42,7 @@ public:
 
 protected:
     //Set led at position p to color
-    void setLed(unsigned int p, Color color) {
+    virtual void setLed(unsigned int p, Color color) {
         display->setLed(p, color);
     }
 
@@ -53,7 +53,7 @@ protected:
     void setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2);
 
     //Set all leds to color using setLed
-    void setAllLeds(Color color);
+    virtual void setAllLeds(Color color);
 
     //Set pixel colors using setLed
     virtual void animationStep() = 0;

@@ -7,7 +7,7 @@ private:
     unsigned int ledNum;
     bool showOnRun = true;
 public:
-    AnimationDisplay(unsigned int ledNum) : ledNum(ledNum) {}
+    explicit AnimationDisplay(unsigned int ledNum) : ledNum(ledNum) {}
 
     virtual void show() = 0;
 

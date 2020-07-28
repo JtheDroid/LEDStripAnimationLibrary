@@ -4,7 +4,7 @@
 
 class FiniteAnimation : public virtual Animation {
 public:
-    FiniteAnimation(AnimationDisplay *display) : Animation(display) {}
+    explicit FiniteAnimation(AnimationDisplay *display) : Animation(display) {}
 
 private:
     bool done{false};
