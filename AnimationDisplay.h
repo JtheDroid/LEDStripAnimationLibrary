@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Color.h"
+#include "ColorRGB.h"
 
+template<class Color = ColorRGB>
 class AnimationDisplay {
 private:
     unsigned int ledNum;

@@ -2,10 +2,10 @@
 #include "FunctionAnimationDisplay.h"
 #include "AnimationPreviewSDL.h"
 
-class TestAnimation : public TimedAnimation {
+class TestAnimation : public TimedAnimation<> {
 public:
-    TestAnimation(AnimationDisplay *display, unsigned long interval) : Animation(display),
-                                                                       TimedAnimation(display, interval) {}
+    TestAnimation(AnimationDisplay<> *display, unsigned long interval) : Animation(display),
+                                                                         TimedAnimation(display, interval) {}
 
 protected:
     void animationStep() override {
@@ -20,7 +20,7 @@ protected:
 int main() {
     struct preview {
         AnimationPreviewSDL sdl;
-        Animation *animation;
+        Animation<> *animation;
     };
     AnimationPreviewSDL sdl{10}, sdl2{100}, sdl3{200};
     TestAnimation anim1{sdl.getSdlDisplayPtr(), 30},

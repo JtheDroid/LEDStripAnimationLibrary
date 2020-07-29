@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include "SDLcleanup.h"
 #include <iostream>
+#include "ColorRGB.h"
 
 class AnimationPreviewSDL {
 private:
@@ -19,12 +20,12 @@ private:
         SDL_RenderFillRect(renderer, &rect);
     }
 
-    void drawLed(unsigned int index, Color color) {
+    void drawLed(unsigned int index, ColorRGB color) {
         int size = (int) (xSize / numPixels);
         drawRect(size * (int) index, 0, size, ySize, (Uint8) color.r, (Uint8) color.g, (Uint8) color.b);
     }
 
-    FunctionAnimationDisplay sdlDisplay;
+    FunctionAnimationDisplay<ColorRGB> sdlDisplay;
 private:
 
     static void printError(const char *where) {
@@ -35,12 +36,12 @@ private:
 public:
     explicit AnimationPreviewSDL(unsigned int numPixels) :
             numPixels(numPixels),
-            sdlDisplay(numPixels, [this](unsigned int pixel, Color c) { drawLed(pixel, c); },
+            sdlDisplay(numPixels, [this](unsigned int pixel, ColorRGB c) { drawLed(pixel, c); },
                        [this]() { draw_show(); }) {
         begin();
     }
 
-    FunctionAnimationDisplay *getSdlDisplayPtr() {
+    FunctionAnimationDisplay<ColorRGB> *getSdlDisplayPtr() {
         return &sdlDisplay;
     }
 

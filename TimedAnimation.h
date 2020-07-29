@@ -1,14 +1,17 @@
 #pragma once
 
+#include "ColorRGB.h"
 #include "Animation.h"
 
-class TimedAnimation : public virtual Animation {
+template<class Color = ColorRGB>
+class TimedAnimation : public virtual Animation<Color> {
 private:
     unsigned long interval, lastRun{millis()};
 public:
-    TimedAnimation(AnimationDisplay *display, unsigned long interval) : Animation(display), interval(interval) {}
+    TimedAnimation(AnimationDisplay<Color> *display, unsigned long interval) : Animation<Color>(display),
+                                                                               interval(interval) {}
 
     void run() override {
-        runTimed(interval, lastRun);
+        Animation<Color>::runTimed(interval, lastRun);
     }
 };

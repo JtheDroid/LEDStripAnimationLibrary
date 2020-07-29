@@ -11,16 +11,17 @@ unsigned long millis() {
 
 #endif
 
-#include "Color.h"
+#include "ColorRGB.h"
 #include "AnimationDisplay.h"
 
+template<class Color = ColorRGB>
 class Animation {
 private:
-    AnimationDisplay *display;
+    AnimationDisplay<Color> *display;
     unsigned int ledNum;
     unsigned long counter = 0;
 public:
-    explicit Animation(AnimationDisplay *display) : display(display), ledNum(display->getLedNum()) {}
+    explicit Animation(AnimationDisplay<Color> *display) : display(display), ledNum(display->getLedNum()) {}
 
     virtual unsigned int getLedNum() const {
         return ledNum;
@@ -59,17 +60,20 @@ protected:
     virtual void animationStep() = 0;
 };
 
-void Animation::run() {
-    run(true);
-}
-
-void Animation::run(bool showOnRun) {
+template<class Color>
+void Animation<Color>::run(bool showOnRun) {
     animationStep();
     if (showOnRun && display->isShowOnRun()) show();
     ++counter;
 }
 
-void Animation::runTimed(unsigned long interval, unsigned long &lastRun) {
+template<class Color>
+void Animation<Color>::run() {
+    run(true);
+}
+
+template<class Color>
+void Animation<Color>::runTimed(unsigned long interval, unsigned long &lastRun) {
     unsigned long now = millis();
     bool shown = false;
     while (now > lastRun && now - lastRun >= interval) {
@@ -82,18 +86,21 @@ void Animation::runTimed(unsigned long interval, unsigned long &lastRun) {
     if (shown && display->isShowOnRun()) show();
 }
 
-void Animation::setAllLeds(Color color) {
+template<class Color>
+void Animation<Color>::setAllLeds(Color color) {
     for (unsigned int p = 0; p < ledNum; ++p) setLed(p, color);
 }
 
-void Animation::setLeds(unsigned int p1, unsigned int p2, Color color) {
+template<class Color>
+void Animation<Color>::setLeds(unsigned int p1, unsigned int p2, Color color) {
     if (p1 >= ledNum) p1 = ledNum - 1;
     if (p2 >= ledNum) p2 = ledNum - 1;
     if (p2 < p1) p2 = p1;
     for (unsigned int p = p1; p <= p2; ++p) setLed(p, color);
 }
 
-void Animation::setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2) {
+template<class Color>
+void Animation<Color>::setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2) {
     if (p2 < p1) p2 = p1;
     int origLength{(int) (p2 - p1)};
     if (p1 >= ledNum) p1 = ledNum - 1;
