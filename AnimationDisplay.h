@@ -2,19 +2,20 @@
 
 #include "ColorRGB.h"
 
+template<class Color = ColorRGB>
 class AnimationDisplay {
 private:
     unsigned int ledNum;
     bool showOnRun = true;
 protected:
-    virtual void setLedImpl(unsigned int p, ColorRGB color) = 0;
+    virtual void setLedImpl(unsigned int p, Color color) = 0;
 
 public:
     explicit AnimationDisplay(unsigned int ledNum) : ledNum(ledNum) {}
 
     virtual void show() = 0;
 
-    virtual void setLed(unsigned int p, ColorRGB color) {
+    virtual void setLed(unsigned int p, Color color) {
         setLedImpl(p, color);
     }
 

@@ -5,15 +5,16 @@
 #include <functional>
 #include <utility>
 
-class FunctionAnimationDisplay : public AnimationDisplay {
+template<class Color = ColorRGB>
+class FunctionAnimationDisplay : public AnimationDisplay<Color> {
 private:
-    std::function<void(unsigned int, ColorRGB)> setFunction;
+    std::function<void(unsigned int, Color)> setFunction;
     std::function<void(void)> showFunction;
 public:
     FunctionAnimationDisplay(unsigned int ledNum,
-                             std::function<void(unsigned int, ColorRGB)> setFunction,
+                             std::function<void(unsigned int, Color)> setFunction,
                              std::function<void(void)> showFunction = []() {}) :
-            AnimationDisplay(ledNum),
+            AnimationDisplay<Color>(ledNum),
             setFunction(std::move(setFunction)),
             showFunction(std::move(showFunction)) {}
 
@@ -23,7 +24,7 @@ public:
     };
 
 protected:
-    void setLedImpl(unsigned int p, ColorRGB color) override {
+    void setLedImpl(unsigned int p, Color color) override {
         setFunction(p, color);
     }
 };

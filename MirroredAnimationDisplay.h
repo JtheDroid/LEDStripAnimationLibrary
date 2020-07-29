@@ -1,14 +1,16 @@
 #pragma once
 
+#include "ColorRGB.h"
 #include "Animation.h"
 
-class MirroredAnimationDisplay : public virtual AnimationDisplay {
+template<class Color = ColorRGB>
+class MirroredAnimationDisplay : public virtual AnimationDisplay<Color> {
 private:
     unsigned int fullLedNum;
 public:
-    explicit MirroredAnimationDisplay(unsigned int ledNum) : AnimationDisplay(ledNum / 2), fullLedNum(ledNum) {}
+    explicit MirroredAnimationDisplay(unsigned int ledNum) : AnimationDisplay<Color>(ledNum / 2), fullLedNum(ledNum) {}
 
-    void setLed(unsigned int p, ColorRGB color) override {
+    void setLed(unsigned int p, Color color) override {
         setLedImpl(p, color);
         setLedImpl(fullLedNum - 1 - p, color);
     }

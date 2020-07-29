@@ -1,10 +1,12 @@
 #pragma once
 
+#include "ColorRGB.h"
 #include "Animation.h"
 
-class FiniteAnimation : public virtual Animation {
+template<class Color = ColorRGB>
+class FiniteAnimation : public virtual Animation<Color> {
 public:
-    explicit FiniteAnimation(AnimationDisplay *display) : Animation(display) {}
+    explicit FiniteAnimation(AnimationDisplay *display) : Animation<Color>(display) {}
 
 private:
     bool done{false};
