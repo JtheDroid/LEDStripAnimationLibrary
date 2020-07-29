@@ -19,4 +19,3 @@ constexpr ColorRGBW ColorRGBW::mixColors(double proportion, ColorRGBW &color1, C
             rgb.r, rgb.g, rgb.b,
             (unsigned int) (color1.w + ((int) color2.w - (int) color1.w) * proportion)};
 }
-

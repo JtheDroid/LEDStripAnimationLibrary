@@ -11,12 +11,6 @@ public:
     constexpr static ColorRGB mixColors(double proportion, ColorRGB &color1, ColorRGB &color2);
 };
 
-constexpr ColorRGB ColorRGB::RED{255, 0, 0};
-constexpr ColorRGB ColorRGB::GREEN{0, 255, 0};
-constexpr ColorRGB ColorRGB::BLUE{0, 0, 255};
-constexpr ColorRGB ColorRGB::WHITE{255, 255, 255};
-constexpr ColorRGB ColorRGB::BLACK{0, 0, 0};
-
 constexpr ColorRGB ColorRGB::mixColors(double proportion, ColorRGB &color1, ColorRGB &color2) {
     return ColorRGB{(unsigned int) (color1.r + ((int) color2.r - (int) color1.r) * proportion),
                     (unsigned int) (color1.g + ((int) color2.g - (int) color1.g) * proportion),
