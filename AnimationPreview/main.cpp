@@ -1,11 +1,11 @@
+#include "Animation.h"
 #include "TimedAnimation.h"
-#include "FunctionAnimationDisplay.h"
 #include "AnimationPreviewSDL.h"
 
 class TestAnimation : public TimedAnimation<> {
 public:
-    TestAnimation(AnimationDisplay<> *display, unsigned long interval) : Animation(display),
-                                                                         TimedAnimation(display, interval) {}
+    TestAnimation(AnimationDisplay<> *display, unsigned long interval) : Animation<>(display),
+                                                                         TimedAnimation<>(display, interval) {}
 
 protected:
     void animationStep() override {
