@@ -11,7 +11,7 @@ unsigned long millis() {
 
 #endif
 
-#include "Color.h"
+#include "ColorRGB.h"
 #include "AnimationDisplay.h"
 
 class Animation {
@@ -42,18 +42,18 @@ public:
 
 protected:
     //Set led at position p to color
-    virtual void setLed(unsigned int p, Color color) {
+    virtual void setLed(unsigned int p, ColorRGB color) {
         display->setLed(p, color);
     }
 
     //Set leds from p1 to p2 to color
-    void setLeds(unsigned int p1, unsigned int p2, Color color);
+    void setLeds(unsigned int p1, unsigned int p2, ColorRGB color);
 
     //Set leds from p1 to p2 to transition from color1 to color2
-    void setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2);
+    void setLedsTransition(unsigned int p1, unsigned int p2, ColorRGB color1, ColorRGB color2);
 
     //Set all leds to color using setLed
-    virtual void setAllLeds(Color color);
+    virtual void setAllLeds(ColorRGB color);
 
     //Set pixel colors using setLed
     virtual void animationStep() = 0;
@@ -82,18 +82,18 @@ void Animation::runTimed(unsigned long interval, unsigned long &lastRun) {
     if (shown && display->isShowOnRun()) show();
 }
 
-void Animation::setAllLeds(Color color) {
+void Animation::setAllLeds(ColorRGB color) {
     for (unsigned int p = 0; p < ledNum; ++p) setLed(p, color);
 }
 
-void Animation::setLeds(unsigned int p1, unsigned int p2, Color color) {
+void Animation::setLeds(unsigned int p1, unsigned int p2, ColorRGB color) {
     if (p1 >= ledNum) p1 = ledNum - 1;
     if (p2 >= ledNum) p2 = ledNum - 1;
     if (p2 < p1) p2 = p1;
     for (unsigned int p = p1; p <= p2; ++p) setLed(p, color);
 }
 
-void Animation::setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2) {
+void Animation::setLedsTransition(unsigned int p1, unsigned int p2, ColorRGB color1, ColorRGB color2) {
     if (p2 < p1) p2 = p1;
     int origLength{(int) (p2 - p1)};
     if (p1 >= ledNum) p1 = ledNum - 1;
@@ -101,7 +101,7 @@ void Animation::setLedsTransition(unsigned int p1, unsigned int p2, Color color1
     int length{(int) (p2 - p1)};
     for (int i = 0; i <= length; ++i) {
         double portion{i * 1.0 / origLength};
-        setLed(p1 + i, Color::mixColors(portion, color1, color2));
+        setLed(p1 + i, ColorRGB::mixColors(portion, color1, color2));
     }
 
 }

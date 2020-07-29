@@ -15,7 +15,7 @@ public:
     }
 
 protected:
-    void setLed(unsigned int p, Color color) override {
+    void setLed(unsigned int p, ColorRGB color) override {
         Animation::setLed(p, color);
         Animation::setLed(getFullLedNum() - 1 - p, color);
     }

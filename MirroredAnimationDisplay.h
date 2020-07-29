@@ -8,7 +8,7 @@ private:
 public:
     explicit MirroredAnimationDisplay(unsigned int ledNum) : AnimationDisplay(ledNum / 2), fullLedNum(ledNum) {}
 
-    void setLed(unsigned int p, Color color) override {
+    void setLed(unsigned int p, ColorRGB color) override {
         setLedImpl(p, color);
         setLedImpl(fullLedNum - 1 - p, color);
     }
