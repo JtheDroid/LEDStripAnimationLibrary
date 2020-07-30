@@ -41,6 +41,19 @@ public:
         display->show();
     };
 
+
+    /** @brief Skip frames if running too slow to keep up with interval
+     *
+     *  If runTimed is not called fast enough to keep up with the interval, multiple animation steps are executed.
+     *
+     *  For some animations, this might not work well
+     *
+     *  @param skipFrames_ enable or disable this behavior
+     */
+    void setSkipFrames(bool skipFrames_) {
+        skipFrames = skipFrames_;
+    }
+
     virtual ~Animation() = default;
 
 protected:
@@ -60,6 +73,9 @@ protected:
 
     //Set pixel colors using setLed
     virtual void animationStep() = 0;
+
+private:
+    bool skipFrames{true};
 };
 
 template<class Color>
@@ -80,15 +96,43 @@ void Animation<Color>::setAllLeds(Color color) {
 }
 
 template<class Color>
+void Animation<Color>::setLeds(unsigned int p1, unsigned int p2, Color color) {
+    if (p1 >= ledNum) p1 = ledNum - 1;
+    if (p2 >= ledNum) p2 = ledNum - 1;
+    if (p2 < p1) p2 = p1;
+    for (unsigned int p = p1; p <= p2; ++p) setLed(p, color);
+}
+
+template<class Color>
+void Animation<Color>::setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2) {
+    if (p2 < p1) p2 = p1;
+    int origLength{(int) (p2 - p1)};
+    if (p1 >= ledNum) p1 = ledNum - 1;
+    if (p2 >= ledNum) p2 = ledNum - 1;
+    int length{(int) (p2 - p1)};
+    for (int i = 0; i <= length; ++i) {
+        double portion{i * 1.0 / origLength};
+        setLed(p1 + i, Color::mixColors(portion, color1, color2));
+    }
+
+}
+
+
+template<class Color>
 void Animation<Color>::runTimed(unsigned long interval, unsigned long &lastRun) {
     unsigned long now = millis();
     bool shown = false;
     while (now > lastRun && now - lastRun >= interval) {
         Animation::run(false);
         shown = true;
-        if (counter == 1) lastRun = now;
-        else lastRun += interval;
-        if (interval == 0) break;
+        if (skipFrames) {
+            if (counter == 1) lastRun = now;
+            else lastRun += interval;
+            if (interval == 0) break;
+        } else {
+            lastRun = now;
+            break;
+        }
     }
     if (shown && display->isShowOnRun()) show();
 }

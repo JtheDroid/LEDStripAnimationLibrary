@@ -3,6 +3,6 @@ project(LEDStripAnimationLibrary)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(AnimationLibrary Animation.cpp ColorRGB.cpp)
+add_library(AnimationLibrary ColorRGB.cpp)
 
 add_subdirectory(AnimationPreview)
