@@ -30,4 +30,6 @@ public:
     bool isShowOnRun() const {
         return showOnRun;
     }
+
+    virtual ~AnimationDisplay() = default;
 };
