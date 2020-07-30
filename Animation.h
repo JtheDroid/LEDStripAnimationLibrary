@@ -41,6 +41,8 @@ public:
         display->show();
     };
 
+    virtual ~Animation() = default;
+
 protected:
     //Set led at position p to color
     virtual void setLed(unsigned int p, Color color) {
