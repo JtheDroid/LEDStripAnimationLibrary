@@ -41,6 +41,19 @@ public:
         display->show();
     };
 
+
+    /** @brief Skip frames if running too slow to keep up with interval
+     *
+     *  If runTimed is not called fast enough to keep up with the interval, multiple animation steps are executed.
+     *
+     *  For some animations, this might not work well
+     *
+     *  @param skipFrames_ enable or disable this behavior
+     */
+    void setSkipFrames(bool skipFrames_) {
+        skipFrames = skipFrames_;
+    }
+
     virtual ~Animation() = default;
 
 protected:
@@ -60,6 +73,9 @@ protected:
 
     //Set pixel colors using setLed
     virtual void animationStep() = 0;
+
+private:
+    bool skipFrames{true};
 };
 
 template<class Color>
@@ -109,9 +125,14 @@ void Animation<Color>::runTimed(unsigned long interval, unsigned long &lastRun) 
     while (now > lastRun && now - lastRun >= interval) {
         Animation::run(false);
         shown = true;
-        if (counter == 1) lastRun = now;
-        else lastRun += interval;
-        if (interval == 0) break;
+        if (skipFrames) {
+            if (counter == 1) lastRun = now;
+            else lastRun += interval;
+            if (interval == 0) break;
+        } else {
+            lastRun = now;
+            break;
+        }
     }
     if (shown && display->isShowOnRun()) show();
 }
