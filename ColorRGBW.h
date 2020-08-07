@@ -5,6 +5,7 @@
 class ColorRGBW : public ColorRGB {
 public:
     constexpr ColorRGBW(unsigned int r, unsigned int g, unsigned int b, unsigned int w) : ColorRGB{r, g, b}, w(w) {}
+    constexpr ColorRGBW(unsigned int r, unsigned int g, unsigned int b) : ColorRGB{r, g, b}, w(0) {}
 
     ColorRGBW(const ColorRGB &rgb, unsigned int w) : ColorRGB{rgb}, w(w) {}
 
