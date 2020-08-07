@@ -2,11 +2,12 @@
 
 #include "ColorRGB.h"
 
-template<class Color = ColorRGB>
+template <class Color = ColorRGB>
 class AnimationDisplay {
 private:
     unsigned int ledNum;
     bool showOnRun = true;
+
 protected:
     virtual void setLedImpl(unsigned int p, Color color) = 0;
 
@@ -17,6 +18,16 @@ public:
 
     virtual void setLed(unsigned int p, Color color) {
         setLedImpl(p, color);
+    }
+
+    virtual void setAllLeds(Color color) {
+        for (unsigned int p = 0; p < ledNum; ++p) {
+            setLed(p, color);
+        }
+    }
+
+    virtual void clear() {
+        setAllLeds({0, 0, 0});
     }
 
     unsigned int getLedNum() const {

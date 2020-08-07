@@ -14,6 +14,14 @@ public:
         strip->show();
     }
 
+    void clear() override {
+        strip->clear();
+    }
+
+    void setAllLeds(ColorRGB color) override {
+        strip->fill(Adafruit_NeoPixel::Color(color.r, color.g, color.b));
+    }
+
 protected:
     void setLedImpl(unsigned int p, ColorRGB color) override {
         strip->setPixelColor(p, color.r, color.g, color.b);
@@ -30,6 +38,14 @@ public:
 
     void show() override {
         strip->show();
+    }
+
+    void clear() override {
+        strip->clear();
+    }
+
+    void setAllLeds(ColorRGBW color) override {
+        strip->fill(Adafruit_NeoPixel::Color(color.r, color.g, color.b, color.w));
     }
 
 protected:

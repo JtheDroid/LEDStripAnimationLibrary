@@ -68,8 +68,14 @@ protected:
     //Set leds from p1 to p2 to transition from color1 to color2
     void setLedsTransition(unsigned int p1, unsigned int p2, Color color1, Color color2);
 
-    //Set all leds to color using setLed
-    virtual void setAllLeds(Color color);
+    //Set all leds to color using display method
+    virtual void setAllLeds(Color color){
+        display->setAllLeds(color);
+    }
+
+    virtual void clear(){
+        display->clear();
+    }
 
     //Set pixel colors using setLed
     virtual void animationStep() = 0;
@@ -88,11 +94,6 @@ void Animation<Color>::run(bool showOnRun) {
 template<class Color>
 void Animation<Color>::run() {
     run(true);
-}
-
-template<class Color>
-void Animation<Color>::setAllLeds(Color color) {
-    for (unsigned int p = 0; p < ledNum; ++p) setLed(p, color);
 }
 
 template<class Color>
