@@ -5,7 +5,7 @@ public:
     constexpr ColorRGB(unsigned int r, unsigned int g, unsigned int b) : r(r), g(g), b(b) {}
 
     unsigned int r, g, b;
-    static const ColorRGB RED, GREEN, BLUE, WHITE, BLACK;
+    static ColorRGB RED, GREEN, BLUE, WHITE, BLACK;
 
     //mix two colors together, proportion decides the amount of each color (0..1) (full color1..full color2)
     constexpr static ColorRGB mixColors(double proportion, ColorRGB &color1, ColorRGB &color2);

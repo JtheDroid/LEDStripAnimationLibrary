@@ -6,14 +6,14 @@ class ColorRGBW : public ColorRGB {
 public:
     constexpr ColorRGBW(unsigned int r, unsigned int g, unsigned int b, unsigned int w) : ColorRGB{r, g, b}, w(w) {}
 
-    constexpr ColorRGBW(const ColorRGB &rgb, unsigned int w) : ColorRGB{rgb}, w(w) {}
+    ColorRGBW(const ColorRGB &rgb, unsigned int w) : ColorRGB{rgb}, w(w) {}
 
     unsigned int w;
 
-    constexpr static ColorRGBW mixColors(double proportion, ColorRGBW &color1, ColorRGBW &color2);
+    static ColorRGBW mixColors(double proportion, ColorRGBW &color1, ColorRGBW &color2);
 };
 
-constexpr ColorRGBW ColorRGBW::mixColors(double proportion, ColorRGBW &color1, ColorRGBW &color2) {
+ColorRGBW ColorRGBW::mixColors(double proportion, ColorRGBW &color1, ColorRGBW &color2) {
     ColorRGB rgb{ColorRGB::mixColors(proportion, color1, color2)};
     return ColorRGBW{
             rgb.r, rgb.g, rgb.b,
