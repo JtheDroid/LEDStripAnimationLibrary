@@ -54,6 +54,10 @@ public:
         skipFrames = skipFrames_;
     }
 
+    bool isDisplayBuffered() {
+        return display->isBuffered();
+    }
+
     virtual ~Animation() = default;
 
 protected:
@@ -73,7 +77,15 @@ protected:
         display->setAllLeds(color);
     }
 
-    virtual void clear(){
+    virtual void copyLed(unsigned int from, unsigned int to) {
+        display->copyLed(from, to);
+    }
+
+    virtual Color getLedColor(unsigned int p) {
+        return display->getLedColor(p);
+    }
+
+    virtual void clear() {
         display->clear();
     }
 

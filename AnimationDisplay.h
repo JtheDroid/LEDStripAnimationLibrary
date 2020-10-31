@@ -6,13 +6,16 @@ template <class Color = ColorRGB>
 class AnimationDisplay {
 private:
     unsigned int ledNum;
-    bool showOnRun = true;
+    bool showOnRun{true};
 
 protected:
+    bool buffered{false};
     virtual void setLedImpl(unsigned int p, Color color) = 0;
 
 public:
     explicit AnimationDisplay(unsigned int ledNum) : ledNum(ledNum) {}
+
+    AnimationDisplay(unsigned int ledNum, bool buffered) : ledNum(ledNum), buffered(buffered) {}
 
     virtual void show() = 0;
 
@@ -24,6 +27,12 @@ public:
         for (unsigned int p = 0; p < ledNum; ++p) {
             setLed(p, color);
         }
+    }
+
+    virtual void copyLed(unsigned int from, unsigned int to) {}
+
+    virtual Color getLedColor(unsigned int p) {
+        return {0, 0, 0};
     }
 
     virtual void clear() {
@@ -40,6 +49,10 @@ public:
 
     bool isShowOnRun() const {
         return showOnRun;
+    }
+
+    bool isBuffered() const {
+        return buffered;
     }
 
     virtual ~AnimationDisplay() = default;
