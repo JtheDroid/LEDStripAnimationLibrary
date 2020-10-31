@@ -17,3 +17,8 @@ constexpr ColorRGB ColorRGB::mixColors(double proportion, ColorRGB &color1, Colo
                     (unsigned int) (color1.b + ((int) color2.b - (int) color1.b) * proportion)
     };
 }
+
+ColorRGB operator*(ColorRGB &color, double value) {
+    ColorRGB black{0, 0, 0};
+    return ColorRGB::mixColors(value, black, color);
+}
