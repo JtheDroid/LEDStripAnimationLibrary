@@ -6,12 +6,15 @@
 template<class Color = ColorRGB>
 class FiniteAnimation : public virtual Animation<Color> {
 public:
-    explicit FiniteAnimation(AnimationDisplay *display) : Animation<Color>(display) {}
+    explicit FiniteAnimation(AnimationDisplay<Color> *display) : Animation<Color>(display) {}
 
-private:
+protected:
     bool done{false};
 public:
     bool isDone() const {
         return done;
+    }
+    void run() override {
+        if(!done) Animation<Color>::run();
     }
 };
