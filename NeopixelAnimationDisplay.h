@@ -45,11 +45,14 @@ void NeopixelAnimationDisplay<ColorRGBW>::setAllLeds(ColorRGBW color) {
 
 template <>
 void NeopixelAnimationDisplay<ColorRGB>::setLedImpl(unsigned int p, ColorRGB color) {
-    strip->setPixelColor(p, color.r, color.g, color.b);
+    strip->setPixelColor(p, Adafruit_NeoPixel::gamma32(Adafruit_NeoPixel::Color(color.r, color.g, color.b)));
 }
 
 template <>
 void NeopixelAnimationDisplay<ColorRGBW>::setLedImpl(unsigned int p, ColorRGBW color) {
+    strip->setPixelColor(p, Adafruit_NeoPixel::gamma32(Adafruit_NeoPixel::Color(color.r, color.g, color.b, color.w)));
+}
+
 template <>
 ColorRGB NeopixelAnimationDisplay<ColorRGB>::getLedColor(unsigned int p) {
     uint32_t color{strip->getPixelColor(p)};
